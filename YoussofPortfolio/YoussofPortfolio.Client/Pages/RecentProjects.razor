@@ -1,0 +1,92 @@
+@using YoussofPortfolio.Client.Models.Session;
+@inject SessionStorage sessionStorage
+
+@if (sessionStorage?.Projects?.Count() > 0)
+{
+    <MudItem id="projects" Style="margin-bottom: 100px;margin-top: 100px;">
+        <MudText Style="text-align: center;color: #d86c00;font-size: clamp(1.875rem, 1.911vw + 1.457rem, 3.75rem);line-height: clamp(2.813rem, 2.102vw + 2.353rem, 4.875rem);">
+            Recent Projects
+        </MudText>
+    </MudItem>
+
+    @for (var i = 0; i < 3; i++)
+    {
+        var buttonNumber = i;
+        <MudHidden Breakpoint="Breakpoint.MdAndUp" Invert>
+        <MudStack Spacing="6" Row="true" Style="place-items: center">
+            @if (buttonNumber % 2 == 0)
+                {
+                    <MudItem xs="6">
+                        <Animate Animation="Animations.ZoomIn" Duration="TimeSpan.FromSeconds(0.5)"
+                                 Delay="TimeSpan.FromSeconds(0.5)">
+                            <div class="image-hover">
+                                <img loading="lazy" Alt="@sessionStorage.Projects[buttonNumber].Alt" Elevation="25" Class="rounded-lg"
+                                     style="width: 100%; object-fit: cover;" Src="@sessionStorage.Projects[buttonNumber].Image">
+                            </div>
+                        </Animate>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <Animate Animation="Animations.FadeUp" Duration="TimeSpan.FromSeconds(0.5)"
+                                 Delay="TimeSpan.FromSeconds(0.5)">
+                            <MudText Typo="Typo.h4" Style="font-weight:bold;">@sessionStorage.Projects[buttonNumber].Title</MudText>
+                            <MudText Typo="Typo.h6" Class="mt-4">@sessionStorage.Projects[buttonNumber].Details</MudText>
+                            <MudButton ButtonType="ButtonType.Button" Size="Size.Medium" Href=@sessionStorage.Projects[buttonNumber].Link target="_blank"
+                                       Style="font-weight:800;" Class="AppBarHoverButton AppBarButton mt-4">
+                                View More
+                            </MudButton>
+                        </Animate>
+                    </MudItem>
+                } 
+                else
+                {
+                    <MudItem xs="6">
+                        <Animate Animation="Animations.FadeUp" Duration="TimeSpan.FromSeconds(0.5)"
+                                 Delay="TimeSpan.FromSeconds(0.5)">
+                            <MudText Typo="Typo.h4" Style="font-weight:bold;">@sessionStorage.Projects[buttonNumber].Title</MudText>
+                            <MudText Typo="Typo.h6" Class="mt-4">@sessionStorage.Projects[buttonNumber].Details</MudText>
+                            <MudButton ButtonType="ButtonType.Button" Size="Size.Medium" Href=@sessionStorage.Projects[buttonNumber].Link target="_blank"
+                                       Style="font-weight:800;" Class="AppBarHoverButton AppBarButton mt-4">
+                                View More
+                            </MudButton>
+                        </Animate>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <Animate Animation="Animations.ZoomIn" Duration="TimeSpan.FromSeconds(0.5)"
+                                 Delay="TimeSpan.FromSeconds(0.5)">
+                            <div class="image-hover">
+                                <img loading="lazy" Alt=@sessionStorage.Projects[buttonNumber].Alt Elevation="25" Class="rounded-lg"
+                                     style="width: 100%; object-fit: cover;" Src=@sessionStorage.Projects[buttonNumber].Image>
+                            </div>
+                        </Animate>
+                    </MudItem>
+                }
+            </MudStack>
+            <div style="margin-top:300px;"></div>
+        </MudHidden>
+        <MudHidden Breakpoint="Breakpoint.MdAndUp">
+            <MudStack Row="false" Style="place-items: center">
+                <MudItem xs="12">
+                    <Animate Animation="Animations.ZoomIn" Duration="TimeSpan.FromSeconds(0.5)"
+                             Delay="TimeSpan.FromSeconds(0.5)">
+                        <div class="image-hover-p">
+                            <img loading="lazy" Alt=@sessionStorage.Projects[buttonNumber].Alt Elevation="25" Class="rounded-lg"
+                                 style="width: 100%; object-fit: cover;" Src=@sessionStorage.Projects[buttonNumber].Image>
+                        </div>
+                    </Animate>
+                </MudItem>
+                <MudItem xs="12">
+                    <Animate Animation="Animations.FadeUp" Duration="TimeSpan.FromSeconds(0.5)"
+                             Delay="TimeSpan.FromSeconds(0.5)">
+                        <MudText Typo="Typo.h6" Style="font-weight:bold;">@sessionStorage.Projects[buttonNumber].Title</MudText>
+                        <MudText Typo="Typo.body1" Class="mt-4">@sessionStorage.Projects[buttonNumber].Details</MudText>
+                        <MudButton ButtonType="ButtonType.Button" Href=@sessionStorage.Projects[buttonNumber].Link target="_blank"
+                                   Style="font-size:10px;font-weight:800;" Class="AppBarHoverButton AppBarButton mt-4">
+                            View More
+                        </MudButton>
+                    </Animate>
+                </MudItem>
+            </MudStack>
+            <div style="margin-top:200px;"></div>
+        </MudHidden>
+    }
+}

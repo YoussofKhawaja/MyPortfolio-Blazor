@@ -1,0 +1,45 @@
+@inject NavigationManager navigationManager
+
+<footer class="site-footer">
+    <MudGrid Spacing="0" Style="text-align:center;align-items:center;">
+        <MudItem xs="12">
+            <MudTooltip Text="GitHub" Arrow="true" Placement="Placement.Top" Duration="1000">
+                <MudIconButton class="s-hover icon-bigger" Style="color:white;" Size="Size.Large"
+                               Href="https://github.com/YoussofKhawaja" target="_blank" Icon="@Icons.Custom.Brands.GitHub">
+                </MudIconButton>
+            </MudTooltip>
+            <MudTooltip Text="LinkedIn" Arrow="true" Placement="Placement.Top" Duration="1000">
+                <MudIconButton class="s-hover icon-bigger" Style="color:white;" Size="Size.Large"
+                               Href="https://www.linkedin.com/in/youssof-khawaja-034150209/" target="_blank"
+                               Icon="@Icons.Custom.Brands.LinkedIn">
+                </MudIconButton>
+            </MudTooltip>
+            <MudTooltip Text="Twitter" Arrow="true" Placement="Placement.Top" Duration="1000">
+                <MudIconButton class="s-hover icon-bigger" Style="color:white;" Size="Size.Large"
+                               Href="https://mobile.twitter.com/khawaja_youssof" target="_blank"
+                               Icon="@Icons.Custom.Brands.Twitter">
+                </MudIconButton>
+            </MudTooltip>
+            <MudTooltip Text="Instagram" Arrow="true" Placement="Placement.Top" Duration="1000">
+                <MudIconButton class="s-hover icon-bigger" Style="color:white;" Size="Size.Large"
+                               Href="https://www.instagram.com/youssofkhawaja" target="_blank"
+                               Icon="@Icons.Custom.Brands.Instagram">
+                </MudIconButton>
+            </MudTooltip>
+        </MudItem>
+        <MudStack Class="my-4" Row=false AlignItems="AlignItems.Center" style="margin: 0 auto;">
+            <MudItem>
+                <MudText>
+                    © 2024 Youssof Khawaja
+                </MudText>
+            </MudItem>
+            <MudItem>
+                <a onclick="@(() => navigationManager.NavigateTo("/Privacy"))" style="cursor:pointer">
+                    <MudText Style="font-size:11px;color: #d86c00" class="FotterHoverPrivacy">
+                        Privacy Policy
+                    </MudText>
+                </a>
+            </MudItem>
+        </MudStack>
+    </MudGrid>
+</footer>

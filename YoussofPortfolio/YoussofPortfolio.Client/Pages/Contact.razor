@@ -1,0 +1,135 @@
+@using System.ComponentModel.DataAnnotations
+@using Blazored.LocalStorage;
+@using Models
+@inject ISnackbar Snackbar
+@inject ILocalStorageService localStorage
+@inject HttpClient HttpClientApi
+
+<MudGrid Spacing="1">
+    <MudItem xs="12" Style="margin-top:100px;">
+        <Animate Animation="Animations.Fade" Duration="TimeSpan.FromSeconds(1)" Delay="TimeSpan.FromSeconds(0.5)">
+            <MudText Align="Align.Center" Style="color: #d86c00;font-size: clamp(2.5rem, 1.274vw + 2.221rem, 3.75rem); line-height: clamp(3.75rem, 1.146vw + 3.499rem, 4.875rem);">Contact</MudText>
+        </Animate>
+    </MudItem>
+    <MudItem xs="12" Class="mt-16">
+        <Animate Animation="Animations.Fade" Duration="TimeSpan.FromSeconds(1)" Delay="TimeSpan.FromSeconds(0.5)">
+            <MudText Typo="Typo.h5" GutterBottom="true" Style="color: #d86c00;">Contact me</MudText>
+        </Animate>
+        <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
+            <MudGrid>
+                <MudItem xs="6">
+                    <Animate Animation="Animations.Fade" Duration="TimeSpan.FromSeconds(1)"
+                             Delay="TimeSpan.FromSeconds(0.6)">
+                        <MudTextField @bind-Value="FirstName" T="string" InputType="InputType.Text" InputMode="InputMode.text" Required="true" Label="First name"
+                                      Variant="Variant.Outlined" id="FirstName" autocomplete="on" />
+                    </Animate>
+                </MudItem>
+                <MudItem xs="6">
+                    <Animate Animation="Animations.Fade" Duration="TimeSpan.FromSeconds(1)"
+                             Delay="TimeSpan.FromSeconds(0.7)">
+                        <MudTextField @bind-Value="LastName" T="string" InputType="InputType.Text" InputMode="InputMode.text" Required="true" Label="Last name"
+                                      Variant="Variant.Outlined" id="LastName" autocomplete="on" />
+                    </Animate>
+                </MudItem>
+                <MudItem xs="12">
+                    <Animate Animation="Animations.Fade" Duration="TimeSpan.FromSeconds(1)"
+                             Delay="TimeSpan.FromSeconds(0.8)">
+                        <MudTextField @bind-Value="Email" T="string" Required="true" Label="Email"
+                                      Variant="Variant.Outlined" id="Email" InputType="InputType.Email" InputMode="InputMode.email" autocomplete="on"
+                                      Validation="@(new EmailAddressAttribute { ErrorMessage = "The email address is invalid" })" />
+                    </Animate>
+                </MudItem>
+                <MudItem xs="12">
+                    <Animate Animation="Animations.Fade" Duration="TimeSpan.FromSeconds(1)"
+                             Delay="TimeSpan.FromSeconds(0.9)">
+                        <MudTextField @bind-Value="PhoneNumber" T="string" InputType="InputType.Telephone" InputMode="InputMode.numeric" Required="false"
+                                      Label="Mobile number (optional)" Variant="Variant.Outlined" id="PhoneNumber" autocomplete="on" />
+                    </Animate>
+                </MudItem>
+                <MudItem xs="12">
+                    <Animate Animation="Animations.Fade" Duration="TimeSpan.FromSeconds(1)"
+                             Delay="TimeSpan.FromSeconds(1)">
+                        <MudTextField @bind-Value="Message" T="string" InputType="InputType.Text" InputMode="InputMode.text" Required="true" Label="Message" Lines="3"
+                                      Variant="Variant.Outlined" id="Message" autocomplete="off" Validation="((string value) => ValidateMessage(value))" ErrorText="Minimum 50 characters" RequiredError="Required"/>
+                    </Animate>
+                </MudItem>
+                <MudItem xs="12" Class="d-flex justify-center">
+                    <Animate Animation="Animations.Fade" Duration="TimeSpan.FromSeconds(1)"
+                             Delay="TimeSpan.FromSeconds(1)">
+                        <MudButton ButtonType="ButtonType.Button" Disabled="@(!success)" OnClick="EmailProcess"
+                                   Style="font-size:15px;font-weight:800;" Class="AppBarHoverButton AppBarButton">
+                            @if (_processing)
+                            {
+                                <MudText Class="ms-2">Processing...</MudText>
+                            }
+                            else
+                            {
+                                <MudText>Submit</MudText>
+                            }
+                        </MudButton>
+                    </Animate>
+                </MudItem>
+            </MudGrid>
+        </MudForm>
+    </MudItem>
+</MudGrid>
+
+@code
+{
+    private string? FirstName { get; set; }
+    private string? LastName { get; set; }
+    private string? Email { get; set; }
+    private string? PhoneNumber { get; set; }
+    private string? Message { get; set; }
+    private bool _processing = false;
+    private bool success;
+    private string[] errors = { };
+    private MudForm? form;
+
+    private bool ValidateMessage(string value)
+    {
+        if (string.IsNullOrEmpty(value) || value.Length < 50)
+        {
+            return false; // Validation failed
+        }
+
+        return true; // Validation passed
+    }
+
+    private async Task EmailProcess()
+    {
+        if (_processing)
+            return;
+
+        _processing = true;
+
+        try
+        {
+            var response = await HttpClientApi.PostAsJsonAsync<Models.Contact>("/api/Mail/SendEmail", new Models.Contact
+                {
+                    FirstName = FirstName,
+                    LastName = LastName,
+                    Email = Email,
+                    PhoneNumber = PhoneNumber,
+                    Message = Message
+                });
+
+            if (!response.EnsureSuccessStatusCode().IsSuccessStatusCode)
+            {
+                Snackbar.Add("Email not sent", Severity.Error);
+            }
+            else
+            {
+                Snackbar.Add("Email sent successfully", Severity.Success);
+                _processing = false;
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add("Error", Severity.Error);
+            Console.WriteLine($"Error: {ex.Message}");
+            _processing = false;
+        }
+    }
+
+}

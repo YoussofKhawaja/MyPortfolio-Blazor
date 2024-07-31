@@ -1,0 +1,47 @@
+<MudItem xs="12">
+    <Animate Animation="Animations.Fade" Duration="TimeSpan.FromSeconds(1)" Delay="TimeSpan.FromSeconds(0.5)">
+        <MudText Style="font-size: clamp(1.563rem, 1.852vw + 1.215rem, 3.438rem);line-height: clamp(2.344rem, 2.099vw + 1.95rem, 4.469rem);">
+            Greetings, I'm Youssof
+        </MudText>
+    </Animate>
+    <Animate Animation="Animations.Fade" Duration="TimeSpan.FromSeconds(1)" Delay="TimeSpan.FromSeconds(0.6)">
+        <MudText>
+            <span style="font-size: clamp(1.25rem, 1.852vw + 0.903rem, 3.125rem);line-height: clamp(1.875rem, 2.16vw + 1.47rem, 4.063rem);">I am a</span>
+            <span style="font-size: clamp(1.563rem, 1.852vw + 1.215rem, 3.438rem);line-height: clamp(2.344rem, 2.099vw + 1.95rem, 4.469rem); color: #d86c00;">DevOps</span>
+            <span style="font-size: clamp(1.25rem, 1.852vw + 0.903rem, 3.125rem);line-height: clamp(1.875rem, 2.16vw + 1.47rem, 4.063rem);">specialist with expertise in managing software development, deployment, and operations</span>
+        </MudText>
+    </Animate>
+    <Animate Animation="Animations.Fade" Duration="TimeSpan.FromSeconds(1)" Delay="TimeSpan.FromSeconds(0.7)">
+        <MudText Style="font-size: clamp(1rem, 0.573vw + 0.875rem, 1.563rem);line-height: clamp(1.5rem, 0.541vw + 1.382rem, 2.031rem);" Class="mt-4">
+            I specialize in continuous integration and delivery (CI/CD) pipelines, infrastructure automation, and cloud deployment technologies.
+        </MudText>
+    </Animate>
+</MudItem>
+<MudItem xs="12" Class="mt-16">
+    <Animate Animation="Animations.Fade" Duration="TimeSpan.FromSeconds(1)" Delay="TimeSpan.FromSeconds(0.8)">
+        <img alt="freeTime" loading="lazy" src="image/free-time.png" style="width: 40%; object-fit: cover;">
+    </Animate>
+</MudItem>
+
+
+@if (!isHidden)
+{
+    <a onclick="document.getElementById('RecentProjects').scrollIntoView({behavior:'smooth'})">
+        <MudItem class="scroll-down"></MudItem>
+    </a>
+}
+
+@code
+{
+    private bool isHidden { get; set; } = true;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Task.Delay(1000).ContinueWith(t => isHidden = false);
+            await InvokeAsync(StateHasChanged);
+        }
+        await base.OnAfterRenderAsync(firstRender);
+    }
+}

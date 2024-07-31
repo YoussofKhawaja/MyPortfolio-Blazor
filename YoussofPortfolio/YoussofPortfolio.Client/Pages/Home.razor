@@ -1,0 +1,102 @@
+﻿@page "/"
+@using YoussofPortfolio.Client.Models;
+@using System.Text;
+@using System.Text.Json;
+@using YoussofPortfolio.Client.Models.Session;
+@inject NavigationManager NavigationManager
+@inject SessionStorage sessionStorage
+
+<PageTitle>Youssof Khawaja - Devops Engineer</PageTitle>
+<HeadContent>
+    <meta name="color-scheme" content="light only">
+    <!-- HTML Meta Tags -->
+    <meta name="description"
+          content="A DevOps Engineer dedicated to optimizing processes and enhancing collaboration to solve real-life challenges.">
+    <meta name="keywords" content="@MetaKeywords">
+
+    @if (IsBlog)
+    {
+        <meta name="author" content="Youssof Khawaja">
+        <meta name="publisher" content="Youssof Khawaja">
+        <meta name="revised" content="Youssof Khawaja, 10/7/2022">
+    }
+
+    <link rel="canonical" href="@(NavigationManager.BaseUri)">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#000000">
+
+    <!-- Google / Search Engine Tags -->
+    <meta itemprop="name" content="@MetaTitle">
+    <meta itemprop="description"
+          content="@MetaContent">
+    <meta itemprop="image" content="@MetaThumbnailUrl">
+
+    <!-- Facebook Meta Tags -->
+    <meta property="og:url" content="@(NavigationManager.BaseUri)">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="@MetaTitle">
+    <meta property="og:description"
+          content="@MetaContent">
+    <meta property="og:image" content="@MetaThumbnailUrl">
+
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="@MetaTitle">
+    <meta name="twitter:description"
+          content="@MetaContent">
+    <meta name="twitter:image" content="@MetaThumbnailUrl">
+</HeadContent>
+@if (!sessionStorage.IsDone)
+{
+    <MudProgressLinear Class="fixed-top" Style="background: #d86c00;z-index:9999999;" Indeterminate="true" />
+    <section style="height:100vh"></section>
+    <style>
+        body {
+            overflow: hidden;
+        }
+    </style>
+}
+else
+{
+    <MudContainer MaxWidth="MaxWidth.Large" Class="my-16 pt-16">
+        <section>
+            <MainBio />
+        </section>
+
+        <div id="RecentProjects">
+            <RecentProjects />
+        </div>
+
+        <div id="Aboutme">
+            <AboutMe />
+        </div>
+
+        <div id="Projects">
+            <Projects />
+        </div>
+
+        <div id="Contact">
+            <Contact />
+        </div>
+    </MudContainer>
+}
+
+@code
+{
+    string MetaTitle = "Youssof khawaja";
+    string MetaContent = "Hello, I'm Youssof, a DevOps Engineer dedicated to optimizing processes and enhancing collaboration to solve real-life challenges.";
+    string MetaThumbnailUrl = "https://i.imgur.com/8nYp8zJ.png";
+    string MetaKeywords = "Youssof Khawaja, Youssof Khawaja portfolio, .net 7, devops engineer, c#,youssof,youssef,youssof khawaja, khawaja, youssof khawaja, youssef khawaja, youssof khawaja portfolio, khawaja, khawaja youssof, youssofkhawaja";
+    bool IsBlog { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        sessionStorage.OnDoneChanged += OnRefreshDone;
+        return base.OnInitializedAsync();
+    }
+
+    private void OnRefreshDone(object? sender, EventArgs args)
+    {
+        StateHasChanged();
+    }
+}

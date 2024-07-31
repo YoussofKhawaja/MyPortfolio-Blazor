@@ -1,0 +1,121 @@
+@using YoussofPortfolio.Client.Models.Session;
+@inject SessionStorage sessionStorage
+
+@if (sessionStorage?.Projects?.Count() > 0)
+{
+    <MudItem xs="12" Style="margin-top:100px;">
+        <Animate Animation="Animations.Fade" Duration="TimeSpan.FromSeconds(0.8)" Delay="TimeSpan.FromSeconds(0.5)">
+            <MudText Class="mb-16" Align="Align.Center" Style="color: #d86c00;font-size: clamp(2.5rem, 1.274vw + 2.221rem, 3.75rem); line-height: clamp(3.75rem, 1.146vw + 3.499rem, 4.875rem);">
+                Projects
+            </MudText>
+        </Animate>
+    </MudItem>
+    <MudGrid Spacing="1" Justify="Justify.Center" Style="place-items: center;margin-top: 50px;">
+        @for (var i = 0; i <= 4; i++)
+        {
+            var buttonNumber = i;
+            <MudItem Class="d-flex" Style="justify-content:center;" xs="12" md="4" lg="4">
+                <Animate Animation="Animations.Fade" Duration="TimeSpan.FromSeconds(1)" Delay="TimeSpan.FromSeconds(0.6)">
+                    <figure class="cardant orange rounded-lg" @onclick="@(e => UpdateHeading(e, buttonNumber))">
+                        <img class="rounded-lg" style="object-fit:cover;height:250px;" src="@sessionStorage.Projects[buttonNumber].Image" alt="@sessionStorage.Projects[buttonNumber].Alt" />
+                        <figcaption class="cursor-pointer">
+                            <div>
+                                <span>View more</span>
+                            </div>
+                            <div>
+                                <h3>@sessionStorage.Projects[buttonNumber].Title</h3>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </Animate>
+            </MudItem>
+        }
+    </MudGrid>
+
+    <MudDrawer @bind-Open="@_drawerOpen" Style="background-color:#151515;" Width="300px" Anchor="MudBlazor.Anchor.End" Elevation="6" Variant="@DrawerVariant.Temporary">
+        <MudDrawerHeader>
+            <MudStack Style="place-items: center; width: 100%;" Row="true">
+                <MudItem Style="width: 100%;">
+                    <MudText Style="color: white;font-weight: bold;" Typo="Typo.h5">
+                        @sessionStorage.Projects[index].Title
+                    </MudText>
+                </MudItem>
+                <MudItem>
+                    <MudIconButton Style="width: 100%; justify-content: flex-end;" Edge="Edge.End" OnClick="@DrawerToggle" Color="Color.Default" Icon="@Icons.Material.Filled.Close">
+                    </MudIconButton>
+                </MudItem>
+            </MudStack>
+        </MudDrawerHeader>
+        <MudDrawerContainer>
+            <MudStack Style="padding: 16px;">
+                <MudItem xs="12" Class="d-flex">
+                    <img loading="lazy" Alt="@sessionStorage.Projects[index].Alt" Elevation="0" Class="rounded-lg"
+                         style="width:100%;height:60%; object-fit: cover;margin:0 auto;" Src="@sessionStorage.Projects[index].Image">
+                </MudItem>
+                <MudItem Style="text-align: center" xs="12">
+                    <MudChip Class="s-hover" Style="color: white">@sessionStorage.Projects?[index]?.Tags?[0]</MudChip>
+                    <MudChip Class="s-hover" Style="color: white">@sessionStorage.Projects?[index]?.Tags?[1]</MudChip>
+                    <MudChip Class="s-hover" Style="color: white">@sessionStorage.Projects?[index]?.Tags?[2]</MudChip>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudText Style="color: white;">
+                        @sessionStorage.Projects[index].Details
+                    </MudText>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudText Style="color: white;font-weight: bold;">
+                        Source Code:
+                    </MudText>
+                    <MudButton ButtonType="ButtonType.Button" DisableElevation="true" EndIcon="@Icons.Custom.Brands.GitHub"
+                               Href="@sessionStorage.Projects[index].Linkr" target="_blank"
+                               Style="font-weight:800;font-size: 12px" Variant="Variant.Filled"
+                               Class="mt-2 s-hover" Color="Color.Dark">
+                        Github
+                    </MudButton>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudText Style="color: white;font-weight: bold;">
+                        Release:
+                    </MudText>
+                    <MudButton ButtonType="ButtonType.Button" DisableElevation="true" EndIcon="@Icons.Custom.Brands.GitHub"
+                               Href="@sessionStorage.Projects[index].Linkr" target="_blank"
+                               Style="font-weight:800;font-size: 12px" Variant="Variant.Filled"
+                               Class="mt-2 s-hover" Color="Color.Dark">
+                        Github Release
+                    </MudButton>
+                </MudItem>
+                <MudDivider Class="mt-4 d-flex" Style="background-color: white;width:75%;margin:0 auto;"></MudDivider>
+                <MudItem Class="mt-2 d-flex" xs="12">
+                    <MudText Typo="Typo.caption" Style="color: white;margin:0 auto;;padding:4px;">
+                        © 2022 Youssof Khawaja
+                    </MudText>
+                </MudItem>
+            </MudStack>
+        </MudDrawerContainer>
+    </MudDrawer>
+}
+
+@if (_drawerOpen)
+{
+    <style>
+        body {
+            overflow: hidden;
+        }
+    </style>
+}
+
+@code {
+    bool _drawerOpen;
+    int index;
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    private void UpdateHeading(MouseEventArgs e, int buttonNumber)
+    {
+        index = buttonNumber;
+        DrawerToggle();
+    }
+}

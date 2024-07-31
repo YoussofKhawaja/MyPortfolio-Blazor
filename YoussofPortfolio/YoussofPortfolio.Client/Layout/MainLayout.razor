@@ -1,0 +1,229 @@
+﻿@using YoussofPortfolio.Client.Models
+@using YoussofPortfolio.Client.Models.Session;
+@inherits LayoutComponentBase
+@inject IDialogService DialogService
+@inject NavigationManager navigationManager
+@inject IJSRuntime JSRuntime
+@inject SessionStorage sessionStorage
+@inject HttpClient HttpClientApi
+
+<MudThemeProvider IsDarkMode="true" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout id="Home">
+    @if (sessionStorage.IsDone)
+    {
+        <MudHidden Breakpoint="Breakpoint.MdAndUp" Invert>
+            <MudAppBar
+            Style="background: transparent !important;backdrop-filter: blur(5px);-webkit-backdrop-filter: blur(5px);"
+            Elevation="0" Class="pt-8 px-8">
+                <Animate Animation="Animations.ZoomOutDown" Duration="TimeSpan.FromSeconds(1)">
+                    <div Class="title">
+                        <MudButton ButtonType="ButtonType.Button" OnClick="@(() => OnClickEventFirst("Home"))"
+                        Style="font-size:25px;background: transparent;">
+                            Youssof’s portfolio
+                        </MudButton>
+                    </div>
+                </Animate>
+                <MudSpacer />
+                <Animate Animation="Animations.ZoomOutDown" Duration="TimeSpan.FromSeconds(1)">
+                    <MudButton ButtonType="ButtonType.Button" OnClick="@(() => OnClickEventFirst("Aboutme"))"
+                    Style="font-size:15px;background: transparent;" Class="AppBarHover AboutmeButton">
+                        About me
+                    </MudButton>
+                </Animate>
+                <Animate Animation="Animations.ZoomOutDown" Duration="TimeSpan.FromSeconds(1)">
+                    <MudButton ButtonType="ButtonType.Button" OnClick="@(() => OnClickEventFirst("Projects"))"
+                    Style="font-size:15px;background: transparent;" Class="AppBarHover">
+                        Projects
+                    </MudButton>
+                </Animate>
+                <Animate Animation="Animations.ZoomOutDown" Duration="TimeSpan.FromSeconds(1)">
+                    <MudButton ButtonType="ButtonType.Button" @onclick="OpenDialog"
+                    Style="font-size:15px;background: transparent;" Class="AppBarHover">
+                        Resume
+                    </MudButton>
+                </Animate>
+                <Animate Animation="Animations.ZoomOutDown" Duration="TimeSpan.FromSeconds(1)">
+                    <MudButton ButtonType="ButtonType.Button" OnClick="@(() => OnClickEventFirst("Contact"))"
+                    Style="font-size:15px;font-weight:800;" Class="AppBarHoverButton AppBarButton">
+                        Contact
+                    </MudButton>
+                </Animate>
+            </MudAppBar>
+
+            <style>
+                .mud-button-text {
+                padding: 6px 20px !important;
+                }
+            </style>
+        </MudHidden>
+        <MudHidden Breakpoint="Breakpoint.MdAndUp">
+            <MudAppBar Elevation="0" Class="pt-8"
+            Style="background: transparent !important;backdrop-filter: blur(5px);-webkit-backdrop-filter: blur(5px);">
+                <Animate Animation="Animations.ZoomOutDown" Duration="TimeSpan.FromSeconds(1)">
+                    <MudToggleIconButton @bind-Toggled="@_drawerOpen" Color="Color.Inherit" Edge="Edge.Start"
+                    Icon="@Icons.Material.Filled.Menu" Title="Off" ToggledIcon="@Icons.Material.Filled.Close" />
+                </Animate>
+                <Animate Animation="Animations.ZoomOutDown" Duration="TimeSpan.FromSeconds(1)">
+                    <MudButton ButtonType="ButtonType.Button" OnClick='(() => ButtonClickedMenu("Home"))'
+                    Style="font-size:15px;background: transparent;" Class="title">
+                        Youssof’s portfolio
+                    </MudButton>
+                </Animate>
+                <MudSpacer></MudSpacer>
+                <Animate Animation="Animations.ZoomOutDown" Duration="TimeSpan.FromSeconds(1)">
+                    <MudButton ButtonType="ButtonType.Button" OnClick='(() => ButtonClickedMenu("Contact"))'
+                    Style="font-size:10px;font-weight:800;" Class="AppBarHoverButton AppBarButton">
+                        Contact
+                    </MudButton>
+                </Animate>
+            </MudAppBar>
+            @if (_drawerOpen)
+            {
+                <MudOverlay Visible
+                ="true" AutoClose
+                ="false" DarkBackground
+                ="true"
+                style="background-color: transparent;backdrop-filter: blur(5px);-webkit-backdrop-filter: blur(5px); z-index: 999;">
+                    <div Class="pt-8"
+                    style="position: fixed; top: 50%; left:50%; transform:translate(-50%,-50%); text-align: center;">
+                        <Animate Animation="@_animation" Duration="TimeSpan.FromSeconds(0.3)" Delay="TimeSpan.FromSeconds(0.1)">
+                            <MudItem xs="12">
+                                <MudButton ButtonType="ButtonType.Button" OnClick='(() => ButtonClickedMenu("Aboutme"))'
+                                Style="font-size: clamp(1.25rem, 2.143vw + 0.982rem, 2.188rem); line-height: clamp(1.875rem, 2.214vw + 1.598rem, 2.844rem);background: transparent;"
+                                Class="AppBarHover">
+                                    About me
+                                </MudButton>
+                            </MudItem>
+                        </Animate>
+                        <Animate Animation="@_animation" Duration="TimeSpan.FromSeconds(0.3)" Delay="TimeSpan.FromSeconds(0.3)">
+                            <MudItem xs="12">
+                                <MudButton ButtonType="ButtonType.Button" OnClick='(() => ButtonClickedMenu("Projects"))'
+                                Style="font-size: clamp(1.25rem, 2.143vw + 0.982rem, 2.188rem); line-height: clamp(1.875rem, 2.214vw + 1.598rem, 2.844rem);background: transparent;"
+                                Class="AppBarHover">
+                                    Projects
+                                </MudButton>
+                            </MudItem>
+                        </Animate>
+                        <Animate Animation="@_animation" Duration="TimeSpan.FromSeconds(0.3)" Delay="TimeSpan.FromSeconds(0.5)">
+                            <MudItem xs="12">
+                                <MudButton ButtonType="ButtonType.Button" OnClick="@(e => OpenDialog())"
+                                Style="font-size: clamp(1.25rem, 2.143vw + 0.982rem, 2.188rem); line-height: clamp(1.875rem, 2.214vw + 1.598rem, 2.844rem);background: transparent;"
+                                Class="AppBarHover">
+                                    Resume
+                                </MudButton>
+                            </MudItem>
+                        </Animate>
+                        <Animate Animation="@_animation" Duration="TimeSpan.FromSeconds(0.3)" Delay="TimeSpan.FromSeconds(0.7)">
+                            <MudItem Class="pt-4" xs="12">
+                                <MudText>
+                                    © 2022 Youssof Khawaja
+                                </MudText>
+                            </MudItem>
+                        </Animate>
+                    </div>
+                </MudOverlay>
+                <style>
+                    body {
+                    overflow: hidden;
+                    }
+                </style>
+            }
+        </MudHidden>
+    }
+    <MudMainContent>
+        <div class="flex-wrapper">
+            @Body
+            <FooterLayout />
+        </div>
+        <MudScrollToTop>
+            <MudFab Class="AppBarHoverButton AppBarButton" StartIcon="@Icons.Material.Filled.ArrowUpward" />
+        </MudScrollToTop>
+    </MudMainContent>
+</MudLayout>
+
+<style>
+    ::-webkit-scrollbar-thumb {
+        background: #d86c00;
+    }
+</style>
+
+@code {
+    bool _drawerOpen;
+    IAnimation _animation = Animations.FadeUp;
+    public List<Project>? _project { get; set; }
+    private string? IsDevice { get; set; }
+    private string? Ip { get; set; }
+
+    void DrawerToggleMenu()
+    {
+        if (_drawerOpen)
+        {
+            _drawerOpen = false;
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        sessionStorage.IsDone = false;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _project = await HttpClientApi.GetFromJsonAsync<List<Project>>("/api/Project");
+
+            sessionStorage.Projects = _project ?? new List<Project>();
+            sessionStorage.IsDone = true;
+            sessionStorage.RefreshDoneBool();
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private async Task OnClickEventFirst(String id)
+    {
+        if (navigationManager.ToBaseRelativePath(navigationManager.Uri) == "")
+        {
+            await ButtonClicked(id);
+        }
+
+        else
+        {
+            navigationManager.NavigateTo("/");
+            await Task.Delay(1000);
+            await ButtonClicked(id);
+        }
+    }
+
+    private void OpenDialog()
+    {
+        if (sessionStorage.IsResumeOpened)
+            return;
+
+        var options = new DialogOptions { CloseOnEscapeKey = false, MaxWidth = MaxWidth.Medium, FullWidth = true,DisableBackdropClick = true };
+        DialogService.Show<Dialog>("Resume", options);
+        sessionStorage.IsResumeOpened = true;
+    }
+
+    private async Task ButtonClicked(string id)
+    {
+        await JSRuntime.InvokeVoidAsync("scrollToElement", id);
+    }
+
+    private async Task ButtonClickedMenu(string id)
+    {
+        if (navigationManager.ToBaseRelativePath(navigationManager.Uri) == "")
+        {
+            DrawerToggleMenu();
+            await JSRuntime.InvokeVoidAsync("scrollToElement", id);
+        }
+        else
+        {
+            DrawerToggleMenu();
+            navigationManager.NavigateTo("/");
+        }
+    }
+}

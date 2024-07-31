@@ -1,0 +1,80 @@
+@using YoussofPortfolio.Client.Models.Session;
+@inject SessionStorage sessionStorage
+@inject IJSRuntime JSRuntime
+
+<MudDialog>
+    <DialogContent>
+        @if (IsLoading)
+        {
+            <MudProgressLinear Class="fixed-top" Style="background: #d86c00;z-index:999;" Indeterminate="true" />
+        }
+
+        <div style="height: 50vh;">
+            <embed id="embedContent" src="https://drive.google.com/file/d/1tYnHThnh7-2sb09Wl0bd1SGTjNqXRSLY/preview"
+                   style="height: 100%;width:99%;z-index: 100; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
+        </div>
+    </DialogContent>
+    <DialogActions>
+        <MudButton ButtonType="ButtonType.Button" Size="Size.Small" OnClick="Cancel" Style="font-weight:800;"
+                   Class="AppBarHoverButton AppBarButton">
+            Cancel
+        </MudButton>
+        <a href="https://drive.google.com/u/0/uc?id=1tYnHThnh7-2sb09Wl0bd1SGTjNqXRSLY&export=download"
+           download="YoussofKhawaja.pdf">
+            <MudButton ButtonType="ButtonType.Button" Size="Size.Small" OnClick="Submit" Style="font-weight:800;"
+                       Class="AppBarHoverButton AppBarButton">
+                Download
+            </MudButton>
+        </a>
+    </DialogActions>
+</MudDialog>
+
+@code {
+
+    [CascadingParameter]
+    MudDialogInstance? MudDialog { get; set; }
+
+    bool IsLoading { get; set; } = true;
+
+    async Task Submit()
+    {
+        MudDialog?.Close(DialogResult.Ok(true));
+        sessionStorage.IsResumeOpened = false;
+    }
+
+    void Cancel()
+    {
+        MudDialog?.Cancel();
+        sessionStorage.IsResumeOpened = false;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await WaitForEmbedLoad();
+        }
+    }
+
+    async Task WaitForEmbedLoad()
+    {
+        while (IsLoading)
+        {
+            var isLoaded = await IsEmbedLoaded();
+            if (isLoaded)
+            {
+                IsLoading = false;
+                StateHasChanged();
+            }
+            else
+            {
+                await Task.Delay(500);
+            }
+        }
+    }
+
+    private async Task<bool> IsEmbedLoaded()
+    {
+        return await JSRuntime.InvokeAsync<bool>("isEmbedLoaded");
+    }
+}
