@@ -12,7 +12,7 @@ namespace YoussofPortfolio.API.Services
 
         public MailService()
         {
-            _mailSystem = new Mail.Core.Mail("no-reply", "no-reply@youssofkhawaja.com", "email", "pwd", "smtp.gmail.com");
+            _mailSystem = new Mail.Core.Mail("no-reply", "sender email", "email", "pwd", "smtp.gmail.com");
         }
 
         public async Task<bool> SendEmailAsync(Contact contact)
@@ -51,7 +51,7 @@ namespace YoussofPortfolio.API.Services
 
                 string[] recipients = { };
 
-                if (await _mailSystem.Send("New contact message", mailContent, recipients, "snoopy.snowy123@gmail.com"))
+                if (await _mailSystem.Send("New contact message", mailContent, recipients, "email u want to receive"))
                 {
                     Log.Information("Mail sent successfully");
                     return true;
