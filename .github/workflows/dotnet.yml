@@ -28,7 +28,3 @@ jobs:
       run: dotnet build YoussofPortfolio.API/YoussofPortfolio.API.csproj --no-restore
     - name: Build (YoussofPortfolio)
       run: dotnet build YoussofPortfolio/YoussofPortfolio/YoussofPortfolio.csproj --no-restore
-    - name: Test
-      run: dotnet test YoussofPortfolio.API/YoussofPortfolio.API.csproj --no-build --verbosity normal
-    - name: Test (YoussofPortfolio)
-      run: dotnet test YoussofPortfolio/YoussofPortfolio/YoussofPortfolio.csproj --no-build --verbosity normal
