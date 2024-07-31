@@ -76,6 +76,11 @@ dotnet run
 }
 ```
 
+## Configuring mail
+- Edit YoussofPortfolio.API/Services/MailService.cs
+    - Replace email with your email and pwd with your password
+
+
 ## API Endpoints
 - Mail API: `/api/Mail/SendMail`
     - Endpoint for sending contact emails.
