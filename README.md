@@ -1,6 +1,6 @@
 # Blazor Portfolio Project
 
-This is an interactive Blazor application built with the MudBlazor framework. The application uses ASP.NET Web API to fetch project data and send contact emails. (Not going to update this portfolio anymore since i migrated my portfolio to react as frontend)
+This is an interactive Blazor application built with the MudBlazor framework. The application uses ASP.NET Web API to fetch project data and send contact emails. **(Not going to update this portfolio anymore since i migrated my portfolio to react as frontend)**
 
 # Preview
 ![image](www.youssofkhawaja.com_.png)
